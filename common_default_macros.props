@@ -6,6 +6,9 @@
   <PropertyGroup Label="Configuration">
     <PlatformToolSet>$(DefaultPlatformToolset)</PlatformToolSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(SolutionDir)intermediate\$(ProjectName)-$(Configuration)-$(Platform)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />
 </Project>
