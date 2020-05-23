@@ -54,6 +54,9 @@ jobs:
         configuration: 'Release - LLVM'
       displayName: Compile RPCS3
 
+    - bash: .ci/cache-windows.sh
+      displayName: Write Cache
+
     - bash: .ci/deploy-windows.sh
       displayName: Pack up build artifacts
 

@@ -63,6 +63,12 @@ download_and_verify()
     return 1;
 }
 
+# Restore intermediate from cache
+[ -e "$CACHE_DIR/intermediate" ] && cp -r "$CACHE_DIR/intermediate" .
+
+# Restore lib/*.bsc from cache
+[ -e "$CACHE_DIR/lib" ] && cp -r "$CACHE_DIR/lib" .
+
 # Some dependencies install here
 [ -d "./lib" ] || mkdir "./lib"
 
