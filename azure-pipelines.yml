@@ -60,6 +60,7 @@ jobs:
     - task: VSBuild@1
       inputs:
         solution: 'rpcs3.sln'
+        clean: false
         maximumCpuCount: true
         platform: x64
         configuration: 'Release - LLVM'
