@@ -33,6 +33,12 @@ DEP_URLS="         \
 [ -d "$CACHE_DIR" ] || mkdir "$CACHE_DIR"
 [ -d "$CCACHE_DIR" ] || mkdir "$CCACHE_DIR"
 
+# Restore intermediate from cache
+[ -d "$CCACHE_DIR/intermediate" ] && cp -r "$CCACHE_DIR/intermediate" . || echo "intermediate is not cached."
+
+# Restore lib/*.bsc from cache
+[ -d "$CCACHE_DIR/lib" ] && cp -r "$CCACHE_DIR/lib" . || echo "lib is not cached."
+
 # Pull all the submodules except llvm, since it is built separately and we just download that build
 # Note: Tried to use git submodule status, but it takes over 20 seconds
 # shellcheck disable=SC2046
@@ -63,12 +69,6 @@ download_and_verify()
 
     return 1;
 }
-
-# Restore intermediate from cache
-[ -d "$CCACHE_DIR/intermediate" ] && cp -r "$CACHE_DIR/intermediate" . || echo "intermediate is not cached."
-
-# Restore lib/*.bsc from cache
-[ -d "$CCACHE_DIR/lib" ] && cp -r "$CACHE_DIR/lib" . || echo "lib is not cached."
 
 # Some dependencies install here
 [ -d "./lib" ] || mkdir "./lib"
