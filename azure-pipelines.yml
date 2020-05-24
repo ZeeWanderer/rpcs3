@@ -55,6 +55,7 @@ jobs:
         clean: false
         maximumCpuCount: true
         platform: x64
+        msbuildArchitecture: 'x64'
         configuration: 'Release'
       displayName: Compile SPIRV-Tools
 
@@ -64,6 +65,7 @@ jobs:
         clean: false
         maximumCpuCount: true
         platform: x64
+        msbuildArchitecture: 'x64'
         configuration: 'Release - LLVM'
       displayName: Compile RPCS3
 
