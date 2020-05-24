@@ -5,4 +5,5 @@
 cp -r "./intermediate" "$CCACHE_DIR"
 
 # Write only .bsc files to cache
-for file in $(find ./lib -type f | grep .bsc); do cp $file "$CCACHE_DIR" --parent; done
+#for file in $(find ./lib -type f | grep .bsc); do cp $file "$CCACHE_DIR" --parent; done
+for file in $(find ./lib -type f); do cp $file "$CCACHE_DIR" --parent; done
