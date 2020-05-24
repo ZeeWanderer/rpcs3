@@ -38,9 +38,9 @@ jobs:
         key: ccache | $(Agent.OS) | $(COMPILER) | "$(Build.SourceBranch)" | $(Build.SourceVersion)
         path: $(CCACHE_DIR)
         restoreKeys: |
-        ccache | $(Agent.OS) | $(COMPILER) | "$(Build.SourceBranch)"
-        ccache | $(Agent.OS) | $(COMPILER) | "refs/heads/master"
-        ccache | $(Agent.OS) | $(COMPILER)
+          ccache | $(Agent.OS) | $(COMPILER) | "$(Build.SourceBranch)"
+          ccache | $(Agent.OS) | $(COMPILER) | "refs/heads/master"
+          ccache | $(Agent.OS) | $(COMPILER)
       displayName: ccache
 
     - bash: .ci/setup-windows.sh
