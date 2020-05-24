@@ -31,6 +31,7 @@ DEP_URLS="         \
 
 # Azure pipelines doesn't make a cache dir if it doesn't exist, so we do it manually
 [ -d "$CACHE_DIR" ] || mkdir "$CACHE_DIR"
+[ -d "$CCACHE_DIR" ] || mkdir "$CCACHE_DIR"
 
 # Pull all the submodules except llvm, since it is built separately and we just download that build
 # Note: Tried to use git submodule status, but it takes over 20 seconds
@@ -64,10 +65,10 @@ download_and_verify()
 }
 
 # Restore intermediate from cache
-[ -e "$CACHE_DIR/intermediate" ] && cp -r "$CACHE_DIR/intermediate" .
+[ -d "$CCACHE_DIR/intermediate" ] && cp -r "$CACHE_DIR/intermediate" . || echo "intermediate is not cached."
 
 # Restore lib/*.bsc from cache
-[ -e "$CACHE_DIR/lib" ] && cp -r "$CACHE_DIR/lib" .
+[ -d "$CCACHE_DIR/lib" ] && cp -r "$CACHE_DIR/lib" . || echo "lib is not cached."
 
 # Some dependencies install here
 [ -d "./lib" ] || mkdir "./lib"

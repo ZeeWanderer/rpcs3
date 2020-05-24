@@ -21,6 +21,7 @@ jobs:
     VULKAN_SDK_SHA: '181b3353612c8b0fc5e1857b652d62140191ae42b98f2f0d532cf349cebfd8c6'
     VULKAN_SDK: C:\VulkanSDK\$(VULKAN_VER)
     CACHE_DIR: ./cache
+    CCACHE_DIR: ./ccache
 
   pool:
     vmImage: "windows-latest"
@@ -31,6 +32,12 @@ jobs:
         key: $(Agent.OS) | $(COMPILER)
         path: $(CACHE_DIR)
       displayName: Cache
+    
+    - task: Cache@2
+      inputs:
+        key: ccache | $(Agent.OS) | $(COMPILER)
+        path: $(CCACHE_DIR)
+      displayName: ccache
 
     - bash: .ci/setup-windows.sh
       displayName: Download and unpack dependencies
