@@ -52,6 +52,7 @@ jobs:
     - task: MSBuild@1
       inputs:
         solution: './Vulkan/spirv-tools-build/spirv-tools-build.vcxproj'
+        clean: false
         maximumCpuCount: true
         platform: x64
         configuration: 'Release'
