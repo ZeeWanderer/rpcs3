@@ -53,17 +53,41 @@ jobs:
     VULKAN_VER: '1.2.135.0'
     VULKAN_SDK_SHA: '181b3353612c8b0fc5e1857b652d62140191ae42b98f2f0d532cf349cebfd8c6'
     VULKAN_SDK: C:\VulkanSDK\$(VULKAN_VER)
-    CACHE_DIR: ./cache
+    QT_CACHE_DIR: ./qtcache
+    LLVM_CACHE_DIR: ./llvmcache
+    GLSLANG_CACHE_DIR: ./glslangcache
+    VULKAN_CACHE_DIR: ./vulkancache
 
   pool:
     vmImage: "windows-latest"
 
   steps:
+    - bash: .ci/get_keys-windows.sh
+      displayName: Get Cache Keys
+
     - task: Cache@2
       inputs:
-        key: $(Agent.OS) | $(COMPILER)
-        path: $(CACHE_DIR)
-      displayName: Cache
+        key: Qt | $(Agent.OS) | $(COMPILER) | "$(QT_VER)"
+        path: $(QT_CACHE_DIR)
+      displayName: Qt Cache
+
+    - task: Cache@2
+      inputs:
+        key: LLVM | $(Agent.OS) | $(COMPILER) | llvm.lock
+        path: $(LLVM_CACHE_DIR)
+      displayName: LLVM Cache
+    
+    - task: Cache@2
+      inputs:
+        key: GLSLANG | $(Agent.OS) | $(COMPILER) | glslang.lock
+        path: $(GLSLANG_CACHE_DIR)
+      displayName: GLSLANG Cache
+
+    - task: Cache@2
+      inputs:
+        key: VULKAN | $(Agent.OS) | $(COMPILER) | $(VULKAN_SDK_SHA)
+        path: $(VULKAN_CACHE_DIR)
+      displayName: VULKAN Cache
 
     - bash: .ci/setup-windows.sh
       displayName: Download and unpack dependencies

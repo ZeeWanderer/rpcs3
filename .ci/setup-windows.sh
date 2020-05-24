@@ -30,7 +30,10 @@ DEP_URLS="         \
     $VULKAN_SDK_URL"
 
 # Azure pipelines doesn't make a cache dir if it doesn't exist, so we do it manually
-[ -d "$CACHE_DIR" ] || mkdir "$CACHE_DIR"
+[ -d "$QT_CACHE_DIR" ] || mkdir "$QT_CACHE_DIR"
+[ -d "$LLVM_CACHE_DIR" ] || mkdir "$LLVM_CACHE_DIR"
+[ -d "$GLSLANG_CACHE_DIR" ] || mkdir "$GLSLANG_CACHE_DIR"
+[ -d "$VULKAN_CACHE_DIR" ] || mkdir "$VULKAN_CACHE_DIR"
 
 # Pull all the submodules except llvm, since it is built separately and we just download that build
 # Note: Tried to use git submodule status, but it takes over 20 seconds
@@ -52,12 +55,13 @@ download_and_verify()
     correctChecksum="$2"
     algo="$3"
     fileName="$4"
+    cache_dir="$5"
 
     for _ in 1 2 3; do
-        [ -e "$CACHE_DIR/$fileName" ] || curl -L -o "$CACHE_DIR/$fileName" "$url"
-        fileChecksum=$("${algo}sum" "$CACHE_DIR/$fileName" | awk '{ print $1 }')
+        [ -e "$cache_dir/$fileName" ] || curl -L -o "$cache_dir/$fileName" "$url"
+        fileChecksum=$("${algo}sum" "$cache_dir/$fileName" | awk '{ print $1 }')
         [ "$fileChecksum" = "$correctChecksum" ] && return 0
-        rm "$CACHE_DIR/$fileName"
+        rm "$cache_dir/$fileName"
     done
 
     return 1;
@@ -73,22 +77,22 @@ for url in $DEP_URLS; do
 
     # shellcheck disable=SC1003
     case "$url" in
-    *qt*) checksum=$(curl -L "${url}.sha1"); algo="sha1"; outDir='C:\Qt\' ;;
-    *llvm*) checksum=$(curl -L "${url}.sha256"); algo="sha256"; outDir="." ;;
-    *glslang*) checksum=$(curl -L "${url}.sha256"); algo="sha256"; outDir="./lib/Release - LLVM-x64" ;;
+    *qt*) cache_dir="$QT_CACHE_DIR"; checksum=$(curl -L "${url}.sha1"); algo="sha1"; outDir='C:\Qt\' ;;
+    *llvm*) cache_dir="$LLVM_CACHE_DIR"; checksum=$(curl -L "${url}.sha256"); algo="sha256"; outDir="." ;;
+    *glslang*) cache_dir="$GLSLANG_CACHE_DIR"; checksum=$(curl -L "${url}.sha256"); algo="sha256"; outDir="./lib/Release - LLVM-x64" ;;
     *Vulkan*)
         # Vulkan setup needs to be run in batch environment
         # Need to subshell this or else it doesn't wait
-        download_and_verify "$url" "$VULKAN_SDK_SHA" "sha256" "$fileName"
-        cp "$CACHE_DIR/$fileName" .
+        download_and_verify "$url" "$VULKAN_SDK_SHA" "sha256" "$fileName" "$VULKAN_CACHE_DIR"
+        cp "$VULKAN_CACHE_DIR/$fileName" .
         _=$(echo "$fileName /S" | cmd)
         continue
     ;;
     *) echo "Unknown url resource: $url"; exit 1 ;;
     esac
 
-    download_and_verify "$url" "$checksum" "$algo" "$fileName"
-    7z x -y "$CACHE_DIR/$fileName" -aos -o"$outDir"
+    download_and_verify "$url" "$checksum" "$algo" "$fileName" "$cache_dir"
+    7z x -y "$cache_dir/$fileName" -aos -o"$outDir"
 done
 
 # Gather explicit version number and number of commits
