@@ -37,7 +37,7 @@ jobs:
       inputs:
         key: ccache | $(Agent.OS) | $(COMPILER) | "$(Build.SourceBranch)" | $(Build.SourceVersion)
         path: $(CCACHE_DIR)
-        restorekeys: |
+        restoreKeys: |
         ccache | $(Agent.OS) | $(COMPILER) | "$(Build.SourceBranch)"
         ccache | $(Agent.OS) | $(COMPILER) | "refs/heads/master"
         ccache | $(Agent.OS) | $(COMPILER)
