@@ -36,8 +36,11 @@ DEP_URLS="         \
 # Restore intermediate from cache
 [ -d "$CCACHE_DIR/intermediate" ] && cp -r "$CCACHE_DIR/intermediate" . || echo "intermediate is not cached."
 
-# Restore lib/*.bsc from cache
+# Restore lib from cache
 [ -d "$CCACHE_DIR/lib" ] && cp -r "$CCACHE_DIR/lib" . || echo "lib is not cached."
+
+# Restore .vs from cache
+#[ -d "$CCACHE_DIR/.vs" ] && cp -r "$CCACHE_DIR/.vs" . || echo ".vs is not cached."
 
 # Pull all the submodules except llvm, since it is built separately and we just download that build
 # Note: Tried to use git submodule status, but it takes over 20 seconds

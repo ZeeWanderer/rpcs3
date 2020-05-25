@@ -52,20 +52,16 @@ jobs:
     - task: MSBuild@1
       inputs:
         solution: './Vulkan/spirv-tools-build/spirv-tools-build.vcxproj'
-        clean: false
         maximumCpuCount: true
         platform: x64
-        msbuildArchitecture: 'x64'
         configuration: 'Release'
       displayName: Compile SPIRV-Tools
 
     - task: VSBuild@1
       inputs:
         solution: 'rpcs3.sln'
-        clean: false
         maximumCpuCount: true
         platform: x64
-        msbuildArchitecture: 'x64'
         configuration: 'Release - LLVM'
       displayName: Compile RPCS3
 
